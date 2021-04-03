@@ -1,0 +1,69 @@
+body.application {
+    background: #172f48;
+    padding: 25px 20px 0;
+}
+
+body.application > .container-fluid {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.navbar-header {
+    background-color: #3d4a57;
+    border-color: #333;
+    height: 60px;
+}
+
+.navbar-inverse .navbar-nav > li > a,
+.navbar a.navbar-brand {
+    color: #fbfbfb;
+    text-decoration: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: auto;
+}
+
+.map-column {
+    padding-left: 15px;
+    padding-right: 15px;
+    display: inline-block;
+}
+
+.chart-column {
+    padding-left: 15px;
+    padding-right: 15px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.chart-wrapper {
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.chart-wrapper .title {
+    border-bottom: 1px solid #d7d7d7;
+    color: #666;
+    font-size: 14px;
+    font-weight: 200;
+    padding: 7px 10px 4px;
+}
+
+.chart-wrapper .map {
+    padding: 5px 10px;
+    padding: 7px 10px 4px;
+}
+
+.chart-wrapper .radar-chart {
+    width: 280px;
+    height: 230px;
+    overflow: hidden;
+    padding: 5px 5px;
+    position: relative;
+    top: 5px;
+    left: 0px;
+    right: 0px;
+}

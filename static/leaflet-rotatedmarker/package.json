@@ -1,0 +1,46 @@
+{
+  "_from": "leaflet-rotatedmarker",
+  "_id": "leaflet-rotatedmarker@0.2.0",
+  "_inBundle": false,
+  "_integrity": "sha1-RGf0n5jRv9VpWb2cZwUgPdJgEnc=",
+  "_location": "/leaflet-rotatedmarker",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "leaflet-rotatedmarker",
+    "name": "leaflet-rotatedmarker",
+    "escapedName": "leaflet-rotatedmarker",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/leaflet-rotatedmarker/-/leaflet-rotatedmarker-0.2.0.tgz",
+  "_shasum": "4467f49f98d1bfd56959bd9c6705203dd2601277",
+  "_spec": "leaflet-rotatedmarker",
+  "_where": "C:\\Users\\user\\Documents\\Data Science\\Aircraft Localization\\templates",
+  "author": {
+    "name": "Benjamin Becquet",
+    "email": "benjamin.becquet@gmail.com",
+    "url": "http://bbecquet.net"
+  },
+  "bugs": {
+    "url": "https://github.com/bbecquet/Leaflet.RotatedMarker/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Enables rotation of marker icons in Leaflet.",
+  "homepage": "https://github.com/bbecquet/Leaflet.RotatedMarker#readme",
+  "license": "MIT",
+  "main": "leaflet.rotatedMarker.js",
+  "name": "leaflet-rotatedmarker",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/bbecquet/Leaflet.RotatedMarker.git"
+  },
+  "version": "0.2.0"
+}

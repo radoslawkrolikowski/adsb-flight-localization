@@ -1,0 +1,68 @@
+{
+  "_from": "leaflet-hotline",
+  "_id": "leaflet-hotline@0.4.0",
+  "_inBundle": false,
+  "_integrity": "sha1-4BBpg2qdLix4sfodsgE70DyP+Nk=",
+  "_location": "/leaflet-hotline",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "leaflet-hotline",
+    "name": "leaflet-hotline",
+    "escapedName": "leaflet-hotline",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/leaflet-hotline/-/leaflet-hotline-0.4.0.tgz",
+  "_shasum": "e01069836a9d2e2c78b1fa1db2013bd03c8ff8d9",
+  "_spec": "leaflet-hotline",
+  "_where": "C:\\Users\\user\\Documents\\Data Science\\Aircraft Localization\\static",
+  "author": {
+    "name": "Jonas Coch"
+  },
+  "bugs": {
+    "url": "https://github.com/iosphere/Leaflet.hotline/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A Leaflet plugin for drawing colored gradients along a polyline",
+  "devDependencies": {
+    "eslint": "^0.23.0",
+    "uglify-js": "^2.4.23"
+  },
+  "homepage": "https://iosphere.github.io/Leaflet.hotline/demo/",
+  "keywords": [
+    "Leaflet",
+    "plugin",
+    "canvas",
+    "visualization",
+    "path",
+    "gradient",
+    "heatmap",
+    "color",
+    "colour"
+  ],
+  "license": "BSD-2-Clause",
+  "main": "src/leaflet.hotline.js",
+  "name": "leaflet-hotline",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iosphere/Leaflet.hotline.git"
+  },
+  "scripts": {
+    "beautify": "uglifyjs src/leaflet.hotline.js -b --comments /iosphere/ > dist/leaflet.hotline.js",
+    "build": "npm run test && npm run beautify && npm run minify",
+    "clean": "rm -rf dist",
+    "lint": "eslint src/leaflet.hotline.js",
+    "minify": "uglifyjs src/leaflet.hotline.js -c -m --comments /iosphere/ > dist/leaflet.hotline.min.js",
+    "prebuild": "npm run clean && mkdir -p dist",
+    "test": "npm run lint"
+  },
+  "version": "0.4.0"
+}
