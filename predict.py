@@ -294,7 +294,7 @@ if isinstance(model_params, list):
        .option("kafka.bootstrap.servers", ", ".join(kafka_config['servers'])) \
        .option("subscribe", kafka_config['topics'][0]) \
        .option("startingOffsets", "latest") \
-       .option("failOnDataLoss", "true") \
+       .option("failOnDataLoss", "false") \
        .load() \
        .selectExpr("CAST(value AS STRING)") \
        .select(F.from_json(F.col("value"), schema).alias("features")) \
