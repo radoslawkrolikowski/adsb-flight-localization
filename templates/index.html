@@ -1,0 +1,303 @@
+﻿<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script src="/static/leaflet-rotatedmarker/leaflet.rotatedMarker.js" charset="utf-8"></script>
+    <script src="/static/leaflet-hotline/dist/leaflet.hotline.js"></script>
+    <script src="/static/chart.js/dist/Chart.js"></script>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body class="application">
+
+    <div class="navbar" role="navigation">
+        <div class="navbar-header">
+            <img src="/static/logo.png" alt="ADS-B Flight Radar" width="1000" height="60">
+        </div>
+    </div>
+    <div class="container-fluid" style="width: 100%; height: 160vh">
+
+        <div class="map-column" style="width: 80%; height: 150vh">
+            <div class="chart-wrapper">
+                <div class="title">
+                    Flight Radar - live traffic
+                </div>
+                <div class="map"">
+                    <div id="mapid" style="width: 100%; height: 95%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="chart-column" style="width: 15%; height: 150vh">
+            <div class="chart-wrapper">
+                <div class="title">
+                    Flight parameters
+                </div>
+                <div class="radar-chart">
+                    <canvas id="myChart" style="width: 100%; height: 95%"></canvas>
+                </div>
+            </div>
+        </div>
+
+            <script>
+
+                var mymap = L.map('mapid').setView([51.505, -0.09], 6);
+
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 14,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1Ijoia2VkYXIwNCIsImEiOiJja2F6YmY5NHgwODAzMnB0Z2Z4MjdpZWc1In0.VdYVvh70Qj1WFYLcmWLZnw'
+                }).addTo(mymap);
+
+                var mapMarkersCoords = {};
+                var mapMarkers = {}
+
+                // Define functions to calculate the bearing between two coordinates
+                function radians(n) {
+                    return n * (Math.PI / 180);
+                }
+                function degrees(n) {
+                    return n * (180 / Math.PI);
+                }
+
+                function getBearing(startLat, startLong, endLat, endLong) {
+                    startLat = radians(startLat);
+                    startLong = radians(startLong);
+                    endLat = radians(endLat);
+                    endLong = radians(endLong);
+
+                    var dLong = endLong - startLong;
+
+                    var dPhi = Math.log(Math.tan(endLat / 2.0 + Math.PI / 4.0) / Math.tan(startLat / 2.0 + Math.PI / 4.0));
+
+                    if (Math.abs(dLong) > Math.PI) {
+                        if (dLong > 0.0)
+                            dLong = -(2.0 * Math.PI - dLong);
+                        else
+                            dLong = (2.0 * Math.PI + dLong);
+                    }
+
+                    return (degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
+                }
+
+                // Calculate the distance (in km) between two coordinates
+                function calcDist(lat1, lon1, lat2, lon2) {
+                    var R = 6371; 
+
+                    var dLat = radians(lat2-lat1);
+                    var dLon = radians(lon2-lon1);
+                    var lat1 = radians(lat1);
+                    var lat2 = radians(lat2);
+
+                    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                    var d = R * c;
+
+                    return d;
+                }
+
+                // Define the marker icon
+                var planeIcon = L.icon({
+                    iconUrl: './static/plane-map-icon.png',
+                    iconSize: [40, 40], // size of the icon
+                    iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
+                    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                });
+
+                var source = new EventSource('/adsb/');
+                source.addEventListener("message", function (e) {
+
+                    console.log("Message");
+                    obj = JSON.parse(e.data);
+
+                    console.log(obj); // Print message to the browser's console
+
+                    for (const [key, value] of Object.entries(mapMarkers)) {
+
+                        if (obj.aircraft == key) {
+
+                            for (i = 0; i < value.length; i++) {
+                                mymap.removeLayer(value[i]); // remove previous markers
+                            }
+
+                            mapMarkers[key] = []; // clear the markers list
+                        }
+                    }
+
+                    obj.aircraft in mapMarkersCoords || (mapMarkersCoords[obj.aircraft] = []); // set default key: value (aircraft: []) if key not present
+                    obj.aircraft in mapMarkers || (mapMarkers[obj.aircraft] = []);
+
+                    if (obj.aircraft in mapMarkersCoords) {
+                        mapMarkersCoords[obj.aircraft].push(obj.pred); // append predicted coordinates to mapMarkers[aircraft] array
+                    }
+
+                    if (mapMarkersCoords[obj.aircraft].length > 50) {
+                        mapMarkersCoords[obj.aircraft].shift(); // remove first element from an planeRoute array
+                    }
+
+                    for (const [key, value] of Object.entries(mapMarkersCoords)) {
+
+                        if (obj.aircraft == key) {
+
+                            let lat_lon_alt = value[value.length - 1]; // select the last data point
+                            let latitude = lat_lon_alt[0];
+                            let longitude = lat_lon_alt[1];
+                            let altitude = lat_lon_alt[2];
+
+                            console.log('Aircraft: ' + key + ', coordinates: ', latitude, longitude);
+
+                            marker = L.marker([latitude, longitude], {
+                                title: 'Aircraft ' + key + '\nAltitude: ' + Math.round(altitude) + ' m',
+                                icon: planeIcon
+                            }).addTo(mymap).on('mouseover', routeOn).on('mouseout', routeOut).on('click', graph);
+
+                            // Calculate the bearing (if at least 2 data points are available)
+                            if (value.length > 1) {
+
+                                let prev_lat_lon_alt = value[value.length - 2]; // select the penultimate data point
+                                let prev_latitude = prev_lat_lon_alt[0];
+                                let prev_longitude = prev_lat_lon_alt[1];
+
+                                bearing = getBearing(prev_latitude, prev_longitude, latitude, longitude)
+
+                                marker.setRotationAngle(bearing) // rotate the marker
+                            }
+
+                            mapMarkers[key].push(marker);
+
+                        }
+                    }
+
+                    var hotlines = {}
+
+                    function routeOn(e) {
+
+                        for (const [key, value] of Object.entries(mapMarkersCoords)) {
+
+                            key in hotlines || (hotlines[key] = []);
+
+                            if (value.length > 0) {
+
+                                id = mapMarkers[key][0]._leaflet_id
+
+                                // add hotline for a selected marker
+                                if (e.target._leaflet_id == id) {
+
+                                    hotlineLayer = L.hotline(value, {
+                                        min: 1000,
+                                        max: 15000,
+                                        palette: {
+                                            0.0: '#008800',
+                                            0.5: '#ffff00',
+                                            1.0: '#ff0000'
+                                        },
+                                        weight: 5,
+                                        outlineColor: '#000000',
+                                        outlineWidth: 1
+                                    }).addTo(mymap);
+
+                                    hotlines[key].push(hotlineLayer)
+
+                                }
+                            }
+                        }
+
+                    }
+
+                    function routeOut(e) {
+
+                        for (const [key, value] of Object.entries(hotlines)) {
+
+                            for (i = 0; i < value.length; i++) {
+                                mymap.removeLayer(value[i]); // remove hotlines
+                            }
+
+                            hotlines[key] = []; // clear the hotlines list
+
+                        }
+                    }
+
+                    function graph(e) {
+
+                        for (const [key, value] of Object.entries(mapMarkersCoords)) {
+
+                            if (value.length > 0) {
+                                id = mapMarkers[key][0]._leaflet_id
+
+                                // create a chart for a selected marker
+                                if (e.target._leaflet_id == id) {
+
+                                    let lat = [];
+                                    let lon = [];
+                                    let alt = [];
+                                    let dist = [0];
+
+                                    // separate latitude, longitude and altitude
+                                    for (var i = 0; i < value.length; i++) {
+                                        lat.push(value[i][0]);
+                                        lon.push(value[i][1]);
+                                        alt.push(value[i][2]);
+                                    }
+
+                                    console.log('lat', lat)
+                                    console.log('lon', lon)
+                                    console.log('alt', alt)
+
+                                    // calculate the distance
+                                    for (var i = 1; i < lat.length; i++) {
+                                        dist.push(dist[i-1] + calcDist(lat[i-1], lon[i-1], lat[i], lon[i]))
+                                    }
+
+                                    // create dataset
+                                    var dataset = [];
+
+                                    for (var i = 0; i < dist.length; i++) {
+                                        dataset.push({x: dist[i], y: alt[i]})
+                                    }
+
+                                    var ctx = document.getElementById('myChart');
+
+                                    var myChart = new Chart(ctx, {
+                                        type: 'scatter',
+                                        data: {
+                                            datasets: [{
+                                                label: 'Distance in km',
+                                                data: dataset,
+                                                borderColor: 'black',
+                                                borderWidth: 2,
+                                                pointBackgroundColor: ['#000', '#00bcd6', '#d300d6'],
+                                                pointBorderColor: ['#000', '#00bcd6', '#d300d6'],
+                                                showLine: true,
+                                                pointRadius: 5,
+                                                fill: false
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                yAxes: [{
+                                                    scaleLabel: {
+                                                        display: true,
+                                                        labelString: 'Altitude (m)'
+                                                    }
+                                                }]
+                                            }
+                                        }
+                               });
+                            }
+                        }
+                    }
+                }
+                }, false);
+
+            </script>
+</body>
+</html>
