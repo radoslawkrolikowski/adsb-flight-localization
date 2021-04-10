@@ -29,11 +29,11 @@ Additional information about the Aircraft Localization Competition can be found 
 
 ### Table of contents
 
-* [data_inspection](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [data_inspection](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/data_inspection.ipynb)
  	
     The data inspection and visualization notebook will guide you through the process of loading the data, examining the distribution of the features and visualizing an example flight in conjunction with recorded flight parameters such as timestamp, timeAtServer, received signal strength indicator (RSSI), barometric and GPS altitude.
 
-* [data_preprocessing](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [data_preprocessing](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/data_preprocessing.ipynb)
 
    The second tutorial contains instructions on how to perform the data preprocessing that consist of the following steps:
 
@@ -49,11 +49,11 @@ Additional information about the Aircraft Localization Competition can be found 
    - calculate the normalization parameters,
    - save preprocessed data to *HDF5* or *MariaDB*.
 
-* [prepare_eval_test_datasets](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [prepare_eval_test_datasets](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/prepare_eval_test_datasets.ipynb)
 
    In this notebook, we will conduct the data preprocessing to make the evaluation and test datasets ready.  
 
-* [training_ensemble](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [training_ensemble](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/training_ensemble.ipynb)
 
    In this notebook, we are going to build the following estimators from the training set:
 
@@ -62,11 +62,11 @@ Additional information about the Aircraft Localization Competition can be found 
 
    After training the ensemble models will be assessed on an evaluation set.
 
-* [training_TabNet](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [training_TabNet](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/training_TabNet.ipynb)
 
-   In this notebook, we are going to train the TabNet neural network model. The implementation of all building blocks of the model can be found in the file [TabNetBlocks](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb) in this repository.
+   In this notebook, we are going to train the TabNet neural network model. The implementation of all building blocks of the model can be found in the file [TabNetBlocks](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/TabNetBlocks.py) in this repository.
 
-* [TabNetBlocks](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [TabNetBlocks](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/TabNetBlocks.py)
 
    This file contains the *Pytorch* implementations of the following architectures and tools:
    - TabNet neural network model according to: <https://arxiv.org/pdf/1908.07442.pdf>
@@ -77,25 +77,25 @@ Additional information about the Aircraft Localization Competition can be found 
    - Gated Linear Unit blocks
    - Shared and dependant GLU fully connected layers across all decision steps
 
-* [PytorchDatasets](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [PytorchDatasets](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/PytorchDatasets.py)
 
    The Implementation of the custom Pytorch Datasets that can be used to load the data from *HDF5*, *Pandas* or *MariaDB*, but also to perform data normalization.
 
-* [createDB](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [createDB](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/createDB.py)
 
    Creates an 'adsb' database that stores in the main table the preprocessed training dataset.
 
-* [config](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [config](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/config.py)
  	
    The configuration file that includes: 
       - Kafka brokers addresses and topics
       - Database (*MariaDB*) properties
 
-* [ADSB_producer](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [ADSB_producer](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/ADSB_producer.py)
 
    The producer simulates the stream of ADS-B data. It allows specifying the frequency of the messages and the data filtering parameters such as aircraft serial, its localization or altitude. The raw, real-time ADS-B data is preprocessed according to the same steps that have been taken during the training set preparation. Subsequently, that data is published to corresponding Kafka topic, so that we can use it to make a real-time prediction and visualization of the aircraft position.
 
-* [ADSB_preprocessing](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [ADSB_preprocessing](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/ADSB_preprocessing.py)
 
    Performs the ADS-B data preprocessing that includes:
       - exploding the measurements JSON array,
@@ -105,7 +105,7 @@ Additional information about the Aircraft Localization Competition can be found 
       - performing the feature extraction,
       - filling missing values.
 
-* [predict](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [predict](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/predict.py)
 
    - Subscribes to a real-time stream of records in given Kafka topic
    - Performs real-time data normalization and prediction using one of the available models:
@@ -115,9 +115,9 @@ Additional information about the Aircraft Localization Competition can be found 
    - Calculates the average prediction-target distance error in kilometres
    - Sends the predictions, targets, distance error, timeAtServer and aircraft serial number to the Kafka topic
 
-* [flights_map](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
+* [flights_map](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/flights_map.py)
 
-   The real-time flight radar map developed using the *Flask* web framework, *leaflet.js*, *chart.js* and *JavaScript*. The index.html file can be found [here](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
+   The real-time flight radar map developed using the *Flask* web framework, *leaflet.js*, *chart.js* and *JavaScript*. The index.html file can be found [here](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/templates/index.html). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
 
 
 ### Dataset
@@ -247,12 +247,12 @@ A. Data inspection and preprocessing as well as training of the ML models.
 1. Specify your configuration by modifying config.py file:
    - MariaDB properties
    - Kafka brokers addresses and topics
-2. Run and follow the [data_inspection](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb) notebook to get an insight into the nature of the data.
+2. Run and follow the [data_inspection](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/data_inspection.ipynb) notebook to get an insight into the nature of the data.
 3. Create the MariaDB database by running the createDB.py script (not necessary if you want to store preprocessed data in the HDF5 file)
-4. Use the [data_preprocessing](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb) notebook to perform the preprocessing of the entire training dataset (consists of 3 files).
-5. Run the [prepare_eval_test_datasets](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb) notebook to make the evaluation and test sets ready.
-6. Run the [training_ensemble](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb) notebook to build the Random forest regressor and the Gradient-boosted trees estimators from the training set:
-7. Use the [training_TabNet](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb) notebook to train the TabNet neural network model.
+4. Use the [data_preprocessing](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/data_preprocessing.ipynb) notebook to perform the preprocessing of the entire training dataset (consists of 3 files).
+5. Run the [prepare_eval_test_datasets](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/prepare_eval_test_datasets.ipynb) notebook to make the evaluation and test sets ready.
+6. Run the [training_ensemble](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/training_ensemble.ipynb) notebook to build the Random forest regressor and the Gradient-boosted trees estimators from the training set:
+7. Use the [training_TabNet](https://nbviewer.jupyter.org/github/radoslawkrolikowski/adsb-flight-localization/blob/main/training_TabNet.ipynb) notebook to train the TabNet neural network model.
 
 B. Real-time data preprocessing, prediction and visualization.
 1. Before each run of the application we have to start the ZooKeeper and Kafka brokers:
@@ -277,7 +277,7 @@ B. Real-time data preprocessing, prediction and visualization.
 	2. List available topics:
 		- `bin/kafka-topics.sh --list --bootstrap-server localhost:9092`
 
-3. Run the [flights_map](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb) Flask application and then go to the http://localhost:5001/ to access the map.  
+3. Run the [flights_map](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/flights_map.py) Flask application and then go to the http://localhost:5001/ to access the map.  
 4. Then we can run the ADSB_producer.py to preprocess and publish the real-time ADS-B data to the Kafka topic.
 5. To make a real-time prediction run predict.py file (only data that comes after predict.py is launched is going to be considered).
 6. Observe the real-time aircraft localization predictions using the Flight Radar map (http://localhost:5001/)
