@@ -19,12 +19,12 @@ Additional information about the Aircraft Localization Competition can be found 
 
 ### Architecture
 
-![Architecture](https://github.com/radoslawkrolikowski/financial-market-data-analysis/blob/master/assets/app-architecture.png)
+![Architecture](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/assets/architecture.png)
 
 
 ### Demo
 
-![demo gif](https://github.com/radoslawkrolikowski/health-care-analysis/blob/master/assets/Map.gif)
+![demo gif](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/assets/demo.gif)
 
 
 ### Table of contents
@@ -37,17 +37,17 @@ Additional information about the Aircraft Localization Competition can be found 
 
    The second tutorial contains instructions on how to perform the data preprocessing that consist of the following steps:
 
-      - drop the duplicated rows,
-      - check the data frame in terms of missing values,
-      - explode the measurements JSON array, sort it according to sensor serial number and limit the number of measurements,
-      - extract the sensor, timestamp and RSSI information from an array of measurements,
-      - verify sensors' location and correct their elevation,
-      - perform data casting and filtering,
-      - conduct timestamps synchronization,
-      - create linear regression models of timestamp corrections,
-      - perform the feature extraction,
-      - calculate the normalization parameters,
-      - save preprocessed data to *HDF5* or *MariaDB*.
+   - drop the duplicated rows,
+   - check the data frame in terms of missing values,
+   - explode the measurements JSON array, sort it according to sensor serial number and limit the number of measurements,
+   - extract the sensor, timestamp and RSSI information from an array of measurements,
+   - verify sensors' location and correct their elevation,
+   - perform data casting and filtering,
+   - conduct timestamps synchronization,
+   - create linear regression models of timestamp corrections,
+   - perform the feature extraction,
+   - calculate the normalization parameters,
+   - save preprocessed data to *HDF5* or *MariaDB*.
 
 * [prepare_eval_test_datasets](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
@@ -57,8 +57,8 @@ Additional information about the Aircraft Localization Competition can be found 
 
    In this notebook, we are going to build the following estimators from the training set:
 
-      - Random forest regressor (*Sklearn*)
-      - Gradient-boosted trees (*Apache Spark*)
+   - Random forest regressor (*Sklearn*)
+   - Gradient-boosted trees (*Apache Spark*)
 
    After training the ensemble models will be assessed on an evaluation set.
 
@@ -69,13 +69,13 @@ Additional information about the Aircraft Localization Competition can be found 
 * [TabNetBlocks](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
    This file contains the *Pytorch* implementations of the following architectures and tools:
-      - TabNet neural network model according to: <https://arxiv.org/pdf/1908.07442.pdf>
-      - Attentive Transformer
-      - Feature Transformer
-      - Ghost Batch Normalization
-      - Sparsemax activation function
-      - Gated Linear Unit blocks
-      - Shared and dependant GLU fully connected layers across all decision steps
+   - TabNet neural network model according to: <https://arxiv.org/pdf/1908.07442.pdf>
+   - Attentive Transformer
+   - Feature Transformer
+   - Ghost Batch Normalization
+   - Sparsemax activation function
+   - Gated Linear Unit blocks
+   - Shared and dependant GLU fully connected layers across all decision steps
 
 * [PytorchDatasets](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
@@ -126,16 +126,16 @@ Dataset can be downloaded from the Aircraft Localization Competition official we
 
 Dataset folder structure is as follows:
 
-round2_training/
-&ensp;&ensp;&ensp;&ensp;├── round2/
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;  ├── round2_training1.csv
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;  ├── round2_training2.csv 
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;  ├── round2_training3.csv 
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;  ├── round2_sensors.csv 
-    
-round2_competition_data/
-&ensp;&ensp;&ensp;&ensp; ├── round2_competition.csv
-&ensp;&ensp;&ensp;&ensp; ├── round2_sensors.csv 
+	round2_training/
+		├── round2/
+			├── round2_training1.csv
+			├── round2_training2.csv 
+			├── round2_training3.csv 
+			├── round2_sensors.csv 
+
+	round2_competition_data/
+		├── round2_competition.csv
+		|── round2_sensors.csv 
 
 More detailed background information on the provided data can be found [here](https://competition.opensky-network.org/documentation.html)
 
