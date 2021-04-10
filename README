@@ -24,6 +24,7 @@ Additional information about the Aircraft Localization Competition can be found 
 
 ### Demo
 
+![demo gif](https://github.com/radoslawkrolikowski/health-care-analysis/blob/master/assets/Map.gif)
 
 
 ### Table of contents
@@ -139,8 +140,7 @@ round2_competition_data/
 More detailed background information on the provided data can be found [here](https://competition.opensky-network.org/documentation.html)
 
 
-### Docker
-
+### Docker (WIP)
 
 
 ### Installing
