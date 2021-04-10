@@ -2,7 +2,7 @@ import pandas as pd
 import time
 from kafka import KafkaProducer
 from config import kafka_config
-from ADSB_spark_preprocessing import preprocess_adsb
+from ADSB_preprocessing import preprocess_adsb
 
 # Specify the chunk size and the number of rows to be read from the CSV dataset
 chunk_size = 1000
@@ -26,7 +26,7 @@ use_data_without_targets = False
 
 # Specify the data filtering parameters, otherwise set to None
 # Filter the dataset in terms of aircraft number, its localization or altitude
-aircraft = [181, 843] # single int or list of aircraft serials
+aircraft = 863 # [181, 843] single int or list of aircraft serials
 lat_range = None # [42.0, 45.0] # latitude degree range
 lon_range = None # [0, 0.8] # longitude degree range
 baro_alt_range = None #[0, 10500] # baroAltitude range in meters
