@@ -1,0 +1,5 @@
+*.txt linguist-vendored
+*.ipynb linguist-vendored
+.gitattributes linguist-vendored
+assets/architecture.png linguist-vendored
+README.md linguist-documentation=true
