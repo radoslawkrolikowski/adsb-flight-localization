@@ -1,6 +1,20 @@
 # ADS-B Flight Localization
 
-We will begin the new project with the inspection and visualization of the raw dataset retrieved from [AIcrowd](https://www.aicrowd.com/challenges/cyd-campus-aircraft-localization-competition#data-sets), which is a part of the Aircraft Localization Competition powered by <b>OpenSky Network</b> and <b>Cyber-Defence Campus - armasuisse</b>.
+This project will guide you from the beginning with the data inspection and preprocessing up to crafting an end to end application for aircraft localization based on crowdsourced air traffic control communication data. The dataset is a part of the Aircraft Localization Competition powered by **OpenSky Network** and **Cyber-Defence Campus - armasuisse Science and Technology**. It contains the ADS-B transmissions collected by the large-scale sensor network and poses the following challenges:
+- volume - perform data preprocessing and training of the ML models on the data that doesn't fit into the memory,
+- velocity - real-time data preprocessing, prediction and visualization,
+- veracity - issue of unsynchronized receivers, incorrect sensors' localizations,
+- value - perform data preprocessing and predictive analytics that leads to insights - prediction of the aircraft current coordinates and altitude,
+- variety - extraction of the data from the JSON arrays nested inside the table.
+
+To ensure that our application meets the scalability and performance requirements we will have to use the appropriate technologies. The following are the tools that are going to be utilized:
+- distributed data preprocessing with *Apache Spark* and *Modin*,
+- use of ensemble methods (*Apache Spark ML, Sklearn*) and *TabNet* model (*Pytorch*) for tabular learning,
+- memory-efficient loading of data thanks to custom *Pytorch Datasets* implementations,
+- utilize *Apache Kafka* to stream real-time data between internal components of the application,
+- real-time data visualization with *Flask* and *Leaflet.js*.
+
+Additional information about the Aircraft Localization Competition can be found on the official website - [AIcrowd](https://www.aicrowd.com/challenges/cyd-campus-aircraft-localization-competition#introduction).
 
 
 ### Architecture
@@ -32,7 +46,7 @@ We will begin the new project with the inspection and visualization of the raw d
       - create linear regression models of timestamp corrections,
       - perform the feature extraction,
       - calculate the normalization parameters,
-      - save preprocessed data to HDF5 or MariaDB.
+      - save preprocessed data to *HDF5* or *MariaDB*.
 
 * [prepare_eval_test_datasets](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
@@ -42,8 +56,8 @@ We will begin the new project with the inspection and visualization of the raw d
 
    In this notebook, we are going to build the following estimators from the training set:
 
-      - Random forest regressor (Sklearn)
-      - Gradient-boosted trees (Apache Spark)
+      - Random forest regressor (*Sklearn*)
+      - Gradient-boosted trees (*Apache Spark*)
 
    After training the ensemble models will be assessed on an evaluation set.
 
@@ -53,7 +67,7 @@ We will begin the new project with the inspection and visualization of the raw d
 
 * [TabNetBlocks](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
-   This file contains the implementations of the following architectures and tools:
+   This file contains the *Pytorch* implementations of the following architectures and tools:
       - TabNet neural network model according to: <https://arxiv.org/pdf/1908.07442.pdf>
       - Attentive Transformer
       - Feature Transformer
@@ -64,7 +78,7 @@ We will begin the new project with the inspection and visualization of the raw d
 
 * [PytorchDatasets](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
-   The Implementation of the custom Pytorch Datasets that can be used to load the data from HDF5, Pandas or MariaDB, but also to perform data normalization.
+   The Implementation of the custom Pytorch Datasets that can be used to load the data from *HDF5*, *Pandas* or *MariaDB*, but also to perform data normalization.
 
 * [createDB](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
@@ -74,7 +88,7 @@ We will begin the new project with the inspection and visualization of the raw d
  	
    The configuration file that includes: 
       - Kafka brokers addresses and topics
-      - Database (MariaDB) properties
+      - Database (*MariaDB*) properties
 
 * [ADSB_producer](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
@@ -94,15 +108,15 @@ We will begin the new project with the inspection and visualization of the raw d
 
    - Subscribes to a real-time stream of records in given Kafka topic
    - Performs real-time data normalization and prediction using one of the available models:
-      - Pytorch TabNet
-      - Apache Spark Gradient-boosted trees 
-      - Sklearn Random forest regressor
+      - *Pytorch* TabNet
+      - *Apache Spark* Gradient-boosted trees 
+      - *Sklearn* Random forest regressor
    - Calculates the average prediction-target distance error in kilometres
    - Sends the predictions, targets, distance error, timeAtServer and aircraft serial number to the Kafka topic
 
 * [flights_map](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb)
 
-   The real-time flight radar map developed using the Flask web framework, leaflet.js, chart.js and JavaScript. The index.html file can be found [here](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
+   The real-time flight radar map developed using the *Flask* web framework, *leaflet.js*, *chart.js* and *JavaScript*. The index.html file can be found [here](https://github/radoslawkrolikowski/sentiment-analysis-pytorch/blob/master/1_data_processing.ipynb). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
 
 
 ### Dataset
@@ -123,6 +137,7 @@ round2_competition_data/
 &ensp;&ensp;&ensp;&ensp; ├── round2_sensors.csv 
 
 More detailed background information on the provided data can be found [here](https://competition.opensky-network.org/documentation.html)
+
 
 ### Docker
 
