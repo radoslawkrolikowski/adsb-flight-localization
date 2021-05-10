@@ -117,7 +117,7 @@ Additional information about the Aircraft Localization Competition can be found 
 
 * [flights_map](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/flights_map.py)
 
-   The real-time flight radar map developed using the *Flask* web framework, *leaflet.js*, *chart.js* and *JavaScript*. The index.html file can be found in the 'templates' directory - [here](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/templates/index.html). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
+   The real-time flight radar map developed using the *Flask* web framework, *leaflet.js*, *chart.js* and *JavaScript*. The index.html file can be found in the `templates` directory - [here](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/templates/index.html). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
 
    The ADS-B Flight Radar can be accessed under the following URL in your browser - http://localhost:5001/
 
@@ -148,28 +148,33 @@ More detailed background information on the provided data can be found [here](ht
 
 1. Install Docker for your system - <https://docs.docker.com/get-docker/>
 2. Create a directory for mysql data persisted by Docker:
- - `cd adsb-flight-localization`
- - `mkdir mysql`
+   - `cd adsb-flight-localization`
+   - `mkdir mysql`
 3. Change the *MariaDB* and *Kafka* configuration in *config.py*:
- - `mariadb_hostname = 'mariadb'`
- - `kafka_config = {'servers': ['kafka:9092']}`
+   - `mariadb_hostname = 'mariadb'`
+   - `kafka_config = {'servers': ['kafka:9092']}`
 4. Build and run the Docker containers:
 
    Change directory to `docker`:
- - `cd docker`
+ 
+      - `cd docker`
 
-   Set `START_RADAR` variable to 'true' if you want to run the ADSB producer, perform the aircraft localization prediction and launch the flights_map *Flask* application while starting the Docker containers, otherwise set `START_RADAR='false'`
+   Set `START_RADAR='true'` if you want to run the ADSB producer, perform the aircraft localization prediction and launch the flights_map *Flask* application while starting the Docker containers, otherwise set `START_RADAR='false'`
 
    Start the Docker containers without running the ADS-B Flight-Radar, for example, to perform data preprocessing or model training:
- - `START_RADAR='false' docker compose up`
+   
+      - `START_RADAR='false' docker compose up`
+   
    Start the Docker containers and the ADS-B Flight-Radar:
- - `START_RADAR='true' docker compose up`
+      
+      - `START_RADAR='true' docker compose up`
 
    If you are starting it for the first time, the `docker compose up` command begins with building the containers from specified images and Dockerfiles. This process might be compute-intensive, thus if you are experiencing issues, try to build the jupyter-spark container on its own by executing the following command:
- - `cd adsb-flight-localization`
- - `docker build . -t jupyter-spark:1.0 -f docker/jupyter-spark/Dockerfile`
+      
+      - `cd adsb-flight-localization`
+      - `docker build . -t jupyter-spark:1.0 -f docker/jupyter-spark/Dockerfile`
 
-  You can access the Jupyter Notebook (running in Docker) by opening the following URL in your browser (host): `http://localhost:8888`. If you are asked about the access token, copy it from the console. ADS-B Flight-Radar can be accessed by opening `http://localhost:5001`.
+   You can access the Jupyter Notebook (running in Docker) by opening the following URL in your browser (host): `http://localhost:8888`. If you are asked about the access token, copy it from the console. ADS-B Flight-Radar can be accessed by opening `http://localhost:5001`.
 
 
 ### Installing
