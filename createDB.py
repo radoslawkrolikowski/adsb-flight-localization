@@ -3,11 +3,8 @@ import sys
 import pickle
 import logging
 from getpass import getpass
-from config import mariadb_hostname, mariadb_database_name, mariadb_port, mariadb_table_name
+from config import mariadb_hostname, mariadb_database_name, mariadb_port, mariadb_table_name, mariadb_user, mariadb_password
 
-print('Login to MariaDB:')
-mariadb_user = input('User: ')
-mariadb_password = getpass('Password: ')
 
 # Set logging level
 logging.basicConfig(level=logging.INFO)
