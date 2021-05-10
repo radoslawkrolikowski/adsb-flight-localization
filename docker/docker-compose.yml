@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb:10.5.9
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports: 
+      - "3305:3306"
+    volumes: 
+      - ../mysql:/var/lib/mysql
+
+  jupyter-spark:
+    build:
+      dockerfile: Dockerfile
+      context: ./jupyter-spark
+    ports:
+     - 8888:8888
+     - 5001:5001
+    entrypoint: sh -c "./start-flight-radar.sh && exec jupyter notebook"
+    environment: 
+      START_RADAR: "${START_RADAR}"
+      JUPYTER_ALLOW_INSECURE_WRITES: 1
+    depends_on:     
+     - zookeeper
+     - kafka
+     - mariadb
+    volumes: 
+     - ../:/home/jovyan
+     - ../mysql:/var/lib/mysql
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    restart: always
+    environment:
+      KAFKA_CREATE_TOPICS: "adsb:1:1,adsb-pred:1:1" # topic_name : n_partitions : n_replicas
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+    depends_on: 
+      - zookeeper
+    ports:
+      - "9092"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
