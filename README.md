@@ -88,8 +88,8 @@ Additional information about the Aircraft Localization Competition can be found 
 * [config](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/config.py)
  	
    The configuration file that includes: 
-      - Kafka brokers addresses and topics
-      - Database (*MariaDB*) properties
+   - Kafka brokers addresses and topics
+   - Database (*MariaDB*) properties
 
 * [ADSB_producer](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/ADSB_producer.py)
 
@@ -98,12 +98,12 @@ Additional information about the Aircraft Localization Competition can be found 
 * [ADSB_preprocessing](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/ADSB_preprocessing.py)
 
    Performs the ADS-B data preprocessing that includes:
-      - exploding the measurements JSON array,
-      - extracting the sensor, timestamp and RSSI information from an array of measurements,
-      - conducting timestamps synchronization,
-      - adding the sensor localization data,
-      - performing the feature extraction,
-      - filling missing values.
+   - exploding the measurements JSON array,
+   - extracting the sensor, timestamp and RSSI information from an array of measurements,
+   - conducting timestamps synchronization,
+   - adding the sensor localization data,
+   - performing the feature extraction,
+   - filling missing values.
 
 * [predict](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/predict.py)
 
@@ -117,7 +117,11 @@ Additional information about the Aircraft Localization Competition can be found 
 
 * [flights_map](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/flights_map.py)
 
-   The real-time flight radar map developed using the *Flask* web framework, *leaflet.js*, *chart.js* and *JavaScript*. The index.html file can be found [here](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/templates/index.html). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
+   The real-time flight radar map developed using the *Flask* web framework, *leaflet.js*, *chart.js* and *JavaScript*. The index.html file can be found in the 'templates' directory - [here](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/templates/index.html). The `static` directory should contain the following files: CSS, chart.js, leaflet-hotline and leaflet-rotatedmarker files as well as the logo and the plane icon.
+
+   The ADS-B Flight Radar can be accessed under the following URL in your browser - http://localhost:5001/
+
+   You can click on the plane icon to visualize its route and depict the altitude graph.
 
 
 ### Dataset
@@ -140,7 +144,32 @@ Dataset folder structure is as follows:
 More detailed background information on the provided data can be found [here](https://competition.opensky-network.org/documentation.html)
 
 
-### Docker (WIP)
+### Docker
+
+1. Install Docker for your system - <https://docs.docker.com/get-docker/>
+2. Create a directory for mysql data persisted by Docker:
+ - `cd adsb-flight-localization`
+ - `mkdir mysql`
+3. Change the *MariaDB* and *Kafka* configuration in *config.py*:
+ - `mariadb_hostname = 'mariadb'`
+ - `kafka_config = {'servers': ['kafka:9092']}`
+4. Build and run the Docker containers:
+
+   Change directory to `docker`:
+ - `cd docker`
+
+   Set `START_RADAR` variable to 'true' if you want to run the ADSB producer, perform the aircraft localization prediction and launch the flights_map *Flask* application while starting the Docker containers, otherwise set `START_RADAR='false'`
+
+   Start the Docker containers without running the ADS-B Flight-Radar, for example, to perform data preprocessing or model training:
+ - `START_RADAR='false' docker compose up`
+   Start the Docker containers and the ADS-B Flight-Radar:
+ - `START_RADAR='true' docker compose up`
+
+   If you are starting it for the first time, the `docker compose up` command begins with building the containers from specified images and Dockerfiles. This process might be compute-intensive, thus if you are experiencing issues, try to build the jupyter-spark container on its own by executing the following command:
+ - `cd adsb-flight-localization`
+ - `docker build . -t jupyter-spark:1.0 -f docker/jupyter-spark/Dockerfile`
+
+  You can access the Jupyter Notebook (running in Docker) by opening the following URL in your browser (host): `http://localhost:8888`. If you are asked about the access token, copy it from the console. ADS-B Flight-Radar can be accessed by opening `http://localhost:5001`.
 
 
 ### Installing
@@ -187,16 +216,16 @@ Setting up a multi-broker cluster:
 2. Now edit these new files and set the following properties:
 	
     config/server-1.properties:
-	delete.topic.enable=true
+	`delete.topic.enable=true
         broker.id=1
         listeners=PLAINTEXT://:9093
-        log.dirs=/tmp/kafka-logs-1
+        log.dirs=/tmp/kafka-logs-1`
  
     config/server-2.properties:
-	delete.topic.enable=true
+	`delete.topic.enable=true
         broker.id=2
         listeners=PLAINTEXT://:9094
-        log.dirs=/tmp/kafka-logs-2
+        log.dirs=/tmp/kafka-logs-2`
 
 #### MariaDB
 1. Update the `apt` packages index:
@@ -280,7 +309,7 @@ B. Real-time data preprocessing, prediction and visualization.
 3. Run the [flights_map](https://github.com/radoslawkrolikowski/adsb-flight-localization/blob/main/flights_map.py) Flask application and then go to the http://localhost:5001/ to access the map.  
 4. Then we can run the ADSB_producer.py to preprocess and publish the real-time ADS-B data to the Kafka topic.
 5. To make a real-time prediction run predict.py file (only data that comes after predict.py is launched is going to be considered).
-6. Observe the real-time aircraft localization predictions using the Flight Radar map (http://localhost:5001/)
+6. Observe the real-time aircraft localization predictions using the Flight Radar map (http://localhost:5001/). You can click on the plane icon to visualize its route and depict the altitude graph.
  
 
 ### References
