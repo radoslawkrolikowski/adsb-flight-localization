@@ -169,12 +169,12 @@ More detailed background information on the provided data can be found [here](ht
       
       - `START_RADAR='true' docker compose up`
 
-   If you are starting it for the first time, the `docker compose up` command begins with building the containers from specified images and Dockerfiles. This process might be compute-intensive, thus if you are experiencing issues, try to build the jupyter-spark container on its own by executing the following command:
+   If you are starting it for the first time, the `docker compose up` command begins with building the containers from specified images and Dockerfiles. This process might be compute-intensive, thus if you are experiencing issues (OOM), try to build the jupyter-spark container on its own by executing the following command:
       
       - `cd adsb-flight-localization`
       - `docker build . -t jupyter-spark:1.0 -f docker/jupyter-spark/Dockerfile`
 
-   You can access the Jupyter Notebook (running in Docker) by opening the following URL in your browser (host): `http://localhost:8888`. If you are asked about the access token, copy it from the console. ADS-B Flight-Radar can be accessed by opening `http://localhost:5001`.
+   You can access the Jupyter Notebook (running in Docker) by opening the following URL in your browser (host): <http://localhost:8888>. If you are asked about the access token, copy it from the console. ADS-B Flight-Radar can be accessed by opening <http://localhost:5001>.
 
 
 ### Installing
